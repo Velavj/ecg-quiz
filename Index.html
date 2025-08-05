@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ECG Quiz Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+    .quiz-box { background: white; padding: 20px; border-radius: 10px; max-width: 800px; margin: auto; }
+    .question { font-size: 18px; margin-bottom: 15px; }
+    .options button { display: block; margin: 10px 0; padding: 10px; width: 100%; }
+    .answer { margin-top: 20px; font-weight: bold; color: green; }
+    img { max-width: 100%; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; }
+    #scoreBox { margin-top: 30px; font-size: 22px; }
+  </style>
+</head>
+<body>
+
+<div class="quiz-box">
+  <div id="questionBox" class="question"></div>
+  <div id="imageBox"></div>
+  <div class="options" id="optionsBox"></div>
+  <div class="answer" id="answerBox"></div>
+  <div id="scoreBox"></div>
+</div>
+
+<script>
+const quiz = [
+  {
+    question: "Q1. A 55-year-old man with CKD presented with shortness of breath. PR 120/min, BP 85/60. What is the most important next step?",
+    options: [
+      "Urgent CTPA to R/O PE",
+      "Immediate thrombolysis",
+      "POCUS and pericardiocentesis",
+      "IV Ca Gluconate"
+    ],
+    answer: 2,
+    image: "img/image1.jpg"
+  },
+  {
+    question: "Q2. A 57-year-old man with episodic left axillary pain. Pain-free at presentation. Likely diagnosis?",
+    options: [
+      "De Winter T wave",
+      "Wellens syndrome",
+      "Posterior STEMI",
+      "Brugada syndrome"
+    ],
+    answer: 1,
+    image: "img/image2.jpg"
+  },
+  {
+    question: "Q3. A 62-year-old man presented with chest pain. Most appropriate next step?",
+    options: [
+      "Urgent CXR",
+      "Urgent Troponin",
+      "Urgent CTPA",
+      "Posterior Lead ECG"
+    ],
+    answer: 3,
+    image: "img/image3.jpg"
+  },
+  {
+    question: "Q4. 24-year-old female with syncope and alcohol intake. Prodrome of 10-15 sec lightheadedness. Likely diagnosis?",
+    options: [
+      "Hypertrophic Cardiomyopathy (HCM)",
+      "Brugada Syndrome",
+      "WPW Syndrome",
+      "Wellens Syndrome"
+    ],
+    answer: 0,
+    image: "img/image4.jpg"
+  },
+  {
+    question: "Q5. 74-year-old male with central chest pain. No history or risk factors. Likely diagnosis?",
+    options: [
+      "De Winters T wave",
+      "Lateral STEMI",
+      "Anterior STEMI",
+      "High Lateral STEMI"
+    ],
+    answer: 3,
+    image: "img/image5.jpg"
+  },
+  {
+    question: "Q6. 35-year-old diabetic male with abdominal pain and dyspnea. Likely diagnosis?",
+    options: [
+      "Brugada syndrome",
+      "Anterior STEMI",
+      "Hypothermia",
+      "Hyperkalaemia"
+    ],
+    answer: 3,
+    image: "img/image6.jpg"
+  },
+  {
+    question: "Q7. 55-year-old male with central chest pain and diaphoresis. Likely diagnosis?",
+    options: [
+      "Inferior STEMI",
+      "Likely Posterior STEMI",
+      "Complete Heart Block",
+      "All of the above"
+    ],
+    answer: 3,
+    image: "img/image7.jpg"
+  },
+  {
+    question: "Q8. 48-year-old female post-thrombolysis ECG (30 min). Vitals stable. Likely rhythm?",
+    options: [
+      "Ventricular Tachycardia",
+      "Worsening STEMI",
+      "Multiple Ventricular Ectopics (VEB)",
+      "Accelerated Idioventricular Rhythm"
+    ],
+    answer: 3,
+    image: "img/image8.jpg"
+  },
+  {
+    question: "Q9. 10-year-old boy with mild wheeze and SOB. Vitals stable. Likely diagnosis?",
+    options: [
+      "Sinus tachycardia",
+      "Atrial fibrillation",
+      "SVT – AVNRT",
+      "Atrial flutter"
+    ],
+    answer: 2,
+    image: "img/image9.jpg"
+  },
+  {
+    question: "Q10. 53-year-old male after collapse. Likely diagnosis?",
+    options: [
+      "Anteroseptal STEMI",
+      "Bifascicular block",
+      "Posterior STEMI",
+      "Brugada Syndrome"
+    ],
+    answer: 3,
+    image: "img/image10.jpg"
+  },
+  {
+    question: "Q11. 47-year-old male with acute palpitations. Vitals normal. Next management step?",
+    options: [
+      "Immediate cardioversion",
+      "IV magnesium",
+      "IV metoprolol",
+      "Focused history, exam, and investigations"
+    ],
+    answer: 3,
+    image: "img/image11.jpg"
+  },
+  {
+    question: "Q12. 55-year-old man drowned and brought in. ECG shown. Likely diagnosis?",
+    options: [
+      "Acute digoxin toxicity",
+      "Early Anterior STEMI",
+      "Hypothermia",
+      "Multiple artifacts"
+    ],
+    answer: 2,
+    image: "img/image12.jpg"
+  },
+  {
+    question: "Q13. 22-year-old female with sudden severe occipital headache. Cause of ECG changes?",
+    options: [
+      "Left main coronary artery occlusion",
+      "LAD occlusion",
+      "Wellens syndrome",
+      "SAH with increased ICH"
+    ],
+    answer: 3,
+    image: "img/image13.jpg"
+  },
+  {
+    question: "Q14. 30-year-old female with seizure and drowsiness. Cause of ECG pattern?",
+    options: [
+      "Monomorphic VT",
+      "Hyperkalaemia",
+      "SVT with RBBB",
+      "Na channel blocking agent toxicity"
+    ],
+    answer: 3,
+    image: "img/image14.jpg"
+  },
+  {
+    question: "Q15. 17-year-old noticed fast HR on Apple Watch. Likely diagnosis?",
+    options: [
+      "Infero–lateral OMI",
+      "HCM",
+      "WPW syndrome",
+      "ARVD"
+    ],
+    answer: 2,
+    image: "img/image15.jpg"
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function showQuestion() {
+  answered = false;
+  const q = quiz[current];
+  document.getElementById("questionBox").textContent = q.question;
+  const optionsBox = document.getElementById("optionsBox");
+  const imageBox = document.getElementById("imageBox");
+  imageBox.innerHTML = q.image ? `<img src="${q.image}" alt="ECG Image">` : '';
+  optionsBox.innerHTML = "";
+
+  q.options.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (!answered) {
+        if (index === q.answer) score++;
+        answered = true;
+        showAnswer();
+      }
+    };
+    optionsBox.appendChild(btn);
+  });
+
+  document.getElementById("answerBox").textContent = "";
+
+  setTimeout(() => {
+    if (!answered) showAnswer(true);
+  }, 30000); // 30 seconds
+}
+
+function showAnswer(auto = false) {
+  const correct = quiz[current].options[quiz[current].answer];
+  document.getElementById("answerBox").textContent = "Correct Answer: " + correct;
+
+  setTimeout(() => {
+    current++;
+    if (current < quiz.length) {
+      showQuestion();
+    } else {
+      showScore();
+    }
+  }, 5000);
+}
+
+function showScore() {
+  document.getElementById("questionBox").textContent = "";
+  document.getElementById("optionsBox").innerHTML = "";
+  document.getElementById("imageBox").innerHTML = "";
+  document.getElementById("answerBox").textContent = "";
+  document.getElementById("scoreBox").textContent = `Your Final Score: ${score} / ${quiz.length}`;
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
